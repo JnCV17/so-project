@@ -40,12 +40,12 @@
 
 * En la siguiente imagen podemos ver que nuestra máquina virtual se ha creado exitosamente. Ahora vamos a configurar nuestra interfaz de red seleccionando nuestra máquina y presionando en la opción 'Configuración'.
 
-![](imgs/cmv/captura_6.png)
+![](imgs/cmv/captura_6.PNG)
 
 * En el siguiente panel emergente vamos a la opción 'Red' y en la pestaña de 'Adaptador 2', habilitamos el adaptador de red. Después, en la opción 'Conectado a', seleccionamos aquella que dice 'Adaptador puente'. Finalmente seleccionamos la interfaz provistas por el computador y en nuestro caso seleccionaremos la interfaz inalambrica.
 
-![](imgs/cmv/captura_7.png)
+![](imgs/cmv/captura_7.PNG)
 
 * Finalmente aceptamos la configuración y ejecutamos la máquina virtual.
 
-![](imgs/cmv/captura_8.png)
+![](imgs/cmv/captura_8.PNG)
