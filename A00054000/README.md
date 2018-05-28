@@ -46,6 +46,38 @@
 
 ![](imgs/cmv/captura_7.PNG)
 
-* Finalmente aceptamos la configuración y ejecutamos la máquina virtual.
+* Finalmente, aceptamos la configuración y procedemos a ejecutar la máquina virtual. En el siguiente cuadro emergente indicamos la ruta donde se encuentra la ISO con S.O y presionamos en la opción 'Iniciar'.
 
 ![](imgs/cmv/captura_8.PNG)
+
+* Como se puede ver en la siguiente imagen, debemos seleccionar el idioma de instalación de Ubuntu. Selecionaremos la opción 'Español' y luego en 'Instalar ahora'.
+
+![](imgs/iu/captura_1.PNG)
+
+* En la siguiente pantalla seleccionamos ambas opciones para instalar las actualizaciones de ubuntu y softwares de terceros para la compatibilidad del audio y video de nuestro computador. Luego presionamos en la opción 'Continuar'.
+
+![](imgs/iu/captura_2.PNG)
+
+* Debido a que se trata de una instalación limpia, selecionaremos la opción 'Borrar disco e instalar ubuntu' como se muestra en la siguiente imagen. Luego presionamos en 'Instalar ahora'.
+
+![](imgs/iu/captura_3.PNG)
+
+* En la siguiente ventana vamos a selecionar la ciudad donde nos encontremos, en nuestro caso vamos a escribir 'Bogota' y continuaremos con nuestra instalación.
+
+![](imgs/iu/captura_4.PNG)
+
+* A continuación, vamos a seleccionar la disposición de teclado. Por defecto, ubuntu detecta nuestra configuración que es 'Español (latinoamericano)'. Después de esto selecionamos la opción 'Continuar'.
+
+![](imgs/iu/captura_5.PNG)
+
+* En la siguiente pantalla vamos a crear un usuario para nuestro S.O. Vamos a indicarle que el nombre de la máquina sea 'operativos' al igual que el nombre de isuario y la contraseña.
+
+![](imgs/iu/captura_6.PNG)
+
+* Dejaremos que la instalación empiece y una vez finalice nos aparecerá un cuadro indicandonos que deberemos reiniciar la máquina. Después de reiniciar la máquina virtual iniciaremos sesión con nuestro usuario creado en el paso anterior.
+
+![](imgs/iu/captura_7.PNG)
+
+![](imgs/iu/captura_8.PNG)
+
+![](imgs/iu/captura_9.PNG)
