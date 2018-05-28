@@ -89,10 +89,10 @@
 $ apt install lxd lxd-client
 ```
 
-# ¿Qué es un storage pool?
+### ¿Qué es un storage pool?
 * Un storage pool es la agrupación de varios discos SSD en un entorno de almacenamiento compartido, logrando que el sistema operativo vea todos estos disco como un solo disco grande. Cada disco que agregamos a un storage pool se particiona en cuatro segmentos y cada segmento de cada disco se agrupa con una partición de los otros discos creando un Raid Group, finalmente cada Raid Group recibe como nombre Allocation Unit.
 
-# ¿Qué es ZFS?
+### ¿Qué es ZFS?
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
