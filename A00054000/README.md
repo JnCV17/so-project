@@ -6,13 +6,13 @@
 **Tema:**  LXC/LXD Containers  
 **Correo:** daniel.barragan at correo.icesi.edu.co
 
-**Código:** AXXXXXXXXX 
+**Código:** AXXXXXXXXX  
 **Nombre:** Juan Camilo Villada
 
-**Código:** AXXXXXXXXX
+**Código:** AXXXXXXXXX  
 **Nombre:** Ándres Felipe Pérez
 
-**Código:** A00054000
+**Código:** A00054000  
 **Nombre:** Jonatan Ordoñez Burbano
 
 **Repositorio GitHub:** https://github.com/JonatanOrdonez/so-project/tree/so-project
