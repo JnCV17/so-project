@@ -81,3 +81,18 @@
 ![](imgs/iu/captura_8.PNG)
 
 ![](imgs/iu/captura_9.PNG)
+
+## Instalación de LXC/LXD con permisos para el usuario operativos
+* Después de completar la instalación del sistema operativo ubuntu, vamos a ejecutar el siguiente comando para instalar el hypervisor LXD, el cual es un administrador de contenedores de linux y que sirve de complemento para LXC, añadiendo más funcionalidades y facilitando el uso de contenedores a través de comandos simples.
+
+```Console
+$ apt install lxd lxd-client
+```
+
+# ¿Qué es un storage pool?
+* Un storage pool es la agrupación de varios discos SSD en un entorno de almacenamiento compartido, logrando que el sistema operativo vea todos estos disco como un solo disco grande. Cada disco que agregamos a un storage pool se particiona en cuatro segmentos y cada segmento de cada disco se agrupa con una partición de los otros discos creando un Raid Group, finalmente cada Raid Group recibe como nombre Allocation Unit.
+
+# ¿Qué es ZFS?
+
+## Bibliografía
+* https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
