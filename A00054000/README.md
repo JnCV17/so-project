@@ -92,7 +92,18 @@ $ apt install lxd lxd-client
 ### ¿Qué es un storage pool?
 * Un storage pool es la agrupación de varios discos SSD en un entorno de almacenamiento compartido, logrando que el sistema operativo vea todos estos disco como un solo disco grande. Cada disco que agregamos a un storage pool se particiona en cuatro segmentos y cada segmento de cada disco se agrupa con una partición de los otros discos creando un Raid Group, finalmente cada Raid Group recibe como nombre Allocation Unit.
 
-### ¿Qué es ZFS?
+### ¿Qué es ZFS y cuáles son sus ventajas?
+* ZFS es un sistema de ficheros de archivos de código abierto creado por Sun Microsystem y en un principio fue diseñado para el sistema operativo Solaris. Este sistema de ficheros fue provisto con sistemas contra perdida y corrupción de datos, logrando proteger la información del sistema. En resumen, ZFS provee una manera para gestionar el contenido que se almacena en disco en un formato propio.
+
+Entre las principales características que ofrece ZFS se encuentran:
+ * Integridad de datos comparable: Esta característica permite que los archivos se mantengan correctamente, siendo capaz de detectar datos o archivos corruptos y arreglarlos automaticamente, esto se logra a través de un modelo transaccional.
+
+  * Modelo transaccional: Un modelo transaccional consiste en el almacenamiento de eventos o transacciones. Es decir que, cuando un se modifican archivos en el disco duro, estos no son sobreescritos de forma automática sino que se crea un nuevo espacio donde estos datos son grabados y luego se modifican los apuntadores del archivo original para que hagan referencia al nuevo fichero.
+
+  * Snapshots: Son copias del sistema de archivo de fácil creación, permitiendo hacer respaldo de la información o copias de seguridad de forma casi inmediata, con la caracteristica de que son sólo de lectura.
+
+  * Clones: Al igual que los Snapshots, son copias de respaldo del sistema de información, pero estas se puede hacer escritura.
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
+* https://www.redeszone.net/2016/10/01/zfs-las-caracteristicas-este-sistema-archivos-avanzado/
