@@ -90,10 +90,10 @@ $ apt install lxd lxd-client
 ```
 
 ### ¿Qué es un storage pool?
-* Un storage pool es la agrupación de varios discos SSD en un entorno de almacenamiento compartido, logrando que el sistema operativo vea todos estos disco como un solo disco grande. Cada disco que agregamos a un storage pool se particiona en cuatro segmentos y cada segmento de cada disco se agrupa con una partición de los otros discos creando un Raid Group, finalmente cada Raid Group recibe como nombre Allocation Unit.
+Un storage pool es la agrupación de varios discos SSD en un entorno de almacenamiento compartido, logrando que el sistema operativo vea todos estos disco como un solo disco grande. Cada disco que agregamos a un storage pool se particiona en cuatro segmentos y cada segmento de cada disco se agrupa con una partición de los otros discos creando un Raid Group, finalmente cada Raid Group recibe como nombre Allocation Unit.
 
 ### ¿Qué es ZFS y cuáles son sus ventajas?
-* ZFS es un sistema de ficheros de archivos de código abierto creado por Sun Microsystem y en un principio fue diseñado para el sistema operativo Solaris. Este sistema de ficheros fue provisto con sistemas contra perdida y corrupción de datos, logrando proteger la información del sistema. En resumen, ZFS provee una manera para gestionar el contenido que se almacena en disco en un formato propio.
+ZFS es un sistema de ficheros de archivos de código abierto creado por Sun Microsystem y en un principio fue diseñado para el sistema operativo Solaris. Este sistema de ficheros fue provisto con sistemas contra perdida y corrupción de datos, logrando proteger la información del sistema. En resumen, ZFS provee una manera para gestionar el contenido que se almacena en disco en un formato propio.
 
 Entre las principales características que ofrece ZFS se encuentran:
  * Integridad de datos comparable: Esta característica permite que los archivos se mantengan correctamente, siendo capaz de detectar datos o archivos corruptos y arreglarlos automaticamente, esto se logra a través de un modelo transaccional.
