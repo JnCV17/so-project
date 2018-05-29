@@ -179,7 +179,7 @@ $ lxc launch ubuntu:16.04 webserver1
 
 * En la imagen anterior, podemos observar que la asignación de IPs se realiza de forma automática a partir de la configuración de la interfaz bridge creada en los pasos anteriores. Además, los contenedores se encuentran activos. 
 
-* Lo siguiente que haremos es alojar un sitio web utilizando nginx en el primer contendor y segundo, para ello entramos a su shell utilizando el siguiente comando.
+* Lo siguiente que haremos es alojar un sitio web utilizando nginx en los contenedores 'webserver1' y 'webserver2', para ello entramos al shell de webserver1 utilizando el siguiente comando.
 
 ```Console
 $ lxc exec webserver1 -- /bin/bash
@@ -219,11 +219,75 @@ $ sudo service nginx status
 
 ![](imgs/cc/captura_4.PNG)
 
-* Realizamos el mismo procedimiento para el webserver2 y este es el resultado final de hacerle curl a ambos servidores.
+* Realizamos el mismo procedimiento para el 'webserver2' y este es el resultado final de hacerle curl a ambos servidores.
 
 ![](imgs/cc/captura_6.PNG)
 
+* Ya para acabar la configuración de los servidores web, vamos a asignarles un procesador único a cada uno. Para ello utilizaremos el siguiente comando.
+
+```Console
+$ lxc config set webserver1 limits.cpu 1
+```
+
+* Ejecutaremos este mismo comando pero para el 'webserver2' quedando de la siguiente manera.
+
+```Console
+$ lxc config set webserver2 limits.cpu 1
+```
+
+## Creación de contenedor con servicio de balanceo de carga
+* Para crear el balanceador de carga en el contenedor 'loadbalancer' ingresamos a su shell e instalamos nginx.
+
+* Después de instalar el servidor, vamos a crear llamado 'load-balancer.conf' en la carpeta /etc/nginx/conf.d/. Esto lo haremos con el siguiente comando.
+
+```Console
+$ sudo vi /etc/nginx/conf.d/load-balancer.conf
+```
+
+* Se creará un archivo vacío y adentro ingresaremos el siguiente contenido.
+
+```Console
+# Define which servers to include in the load balancing scheme. 
+# It's best to use the servers' private IPs for better performance and security.
+# You can find the private IPs at your UpCloud Control Panel Network section.
+
+upstream backend {
+   least_conn;
+   server 10.60.248.73; 
+   server 10.60.248.86;
+}
+
+# This server accepts all traffic to port 80 and passes it to the upstream. 
+# Notice that the upstream name and the proxy_pass need to match.
+
+server {
+   listen 80; 
+
+   location / {
+      proxy_pass http://backend;
+   }
+}
+```
+
+* El archivo anterior contiene dos servidores que corresponden a los contenedores 'webserver1' y 'webserver2'. Para identificarlos agregamos las IPs de ambos contenedores. Para balancear la carga entre ambos servidores utilizaremos el método 'least connection', el cual dirige las solicitudes al servidor con las conexiones menos activas en ese momento.
+
+* Guardamos el archivo y ejecutamos el siguiente comando para eliminar la carpeta por defecto para alojar sitios web. Esto lo hacemos para que las peticiones no accedan al sitio web sino que pasen por el balanceador de carga.
+
+```Console
+$ sudo rm /etc/nginx/sites-enabled/default
+```
+
+* Finalmente, reiniciaremos el servicio nginx mediante el siguiente comando y nuestro balanceador de carga funcionará correctamente.
+
+```Console
+$ sudo service nginx restart
+```
+
+* En la siguiente imagen podemos ver en la parte izquierda que el servidor donde se encuentra almacenado nuestro balanceador de carga se encuentra activo, en cambio en la parte derecha se hacen dos peticiones CURL a la IP del balanceador de carga y la primera respuesta apunta al servidor uno mientras que la segunda petición da como resultado el servidor dos.
+
+![](imgs/cc/captura_7.PNG)
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
 * https://www.redeszone.net/2016/10/01/zfs-las-caracteristicas-este-sistema-archivos-avanzado/
+* https://www.upcloud.com/support/how-to-set-up-load-balancing/
