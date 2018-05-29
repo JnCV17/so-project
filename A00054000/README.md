@@ -6,7 +6,7 @@
 **Tema:**  LXC/LXD Containers  
 **Correo:** daniel.barragan at correo.icesi.edu.co
 
-**Código:** AXXXXXXXXX  
+**Código:** A00320192  
 **Nombre:** Juan Camilo Villada
 
 **Código:** AXXXXXXXXX  
