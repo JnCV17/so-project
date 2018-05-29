@@ -283,9 +283,26 @@ $ sudo rm /etc/nginx/sites-enabled/default
 $ sudo service nginx restart
 ```
 
-* En la siguiente imagen podemos ver en la parte izquierda que el servidor donde se encuentra almacenado nuestro balanceador de carga se encuentra activo, en cambio en la parte derecha se hacen dos peticiones CURL a la IP del balanceador de carga y la primera respuesta apunta al servidor uno mientras que la segunda petición da como resultado el servidor dos.
+* En la siguiente imagen podemos ver en la parte izquierda que el servidor donde se encuentra almacenado nuestro balanceador de carga se encuentra activo; en cambio, en la parte derecha se hacen dos peticiones CURL a la IP del balanceador de carga y la primera respuesta apunta al servidor uno mientras que la segunda petición da como resultado el servidor dos.
 
 ![](imgs/cc/captura_7.PNG)
+
+* Para permitir conexiones remotas a nuestro balanceador de carga, utilizaremos el siguiente comando que crea una regla en la iptable, la cual permite que el tráfico http del host sea reenviado al contenedor del balanceador de carga.
+
+```Console
+iptables -t nat -A PREROUTING -p tcp -m conntrack --ctstate NEW --dport 80 -j DNAT --to-destination 10.60.248.59:80
+```
+
+* Para verificar que podemos acceder a nuestros servidores pero pasando por el balanceador de carga, vamos al navegador y escribiremos la ip de la máquina virtual que es '192.168.1.10'. Cada vez que recarguemos la página se cambiara el servidor al que estemos accediendo.
+
+![](imgs/cc/captura_8.PNG)
+
+![](imgs/cc/captura_9.PNG)
+
+* Podemos verificar en la siguiente captura que nuestros contenedores se encuentran activos y la interfaz de red tipo bridge se encuentra también activa.
+
+![](imgs/cc/captura_10.PNG)
+
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
