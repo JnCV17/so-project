@@ -89,7 +89,7 @@
 $ sudo apt install lxd lxd-client
 ```
 
-* Además, es necesario instalar el paquete de bridge-utils que contiene una utilidad necesaria para crear y administrar dispositivos puente, lo cual es útil para configurar redes para una máquina virtual. Para instalar este paquete utilizaremos el siguiente comando.
+* Además, es necesario instalar el paquete de bridge-utils que contiene una utilidad necesaria para crear y administrar interfaces bridge, lo cual es útil para configurar redes para una máquina virtual. Para instalar este paquete utilizaremos el siguiente comando.
 
 ```Console
 $ sudo apt-get install bridge-utils
@@ -128,7 +128,7 @@ $ sudo lxd init
 
 ![](imgs/cb/captura_2.PNG)
 
-* Después de entrar en esta interfaz, vamos a indicarle un nombre a la nueva interfaz puente; por cuestiones prácticas le vamos a poner 'bridge' y aceptamos para pasar a la siguiente pantalla.
+* Después de entrar en esta interfaz, vamos a indicarle un nombre a la nueva interfaz puente; por cuestiones prácticas dejamos el valor por defecto y aceptamos para pasar a la siguiente pantalla.
 
 ![](imgs/cb/captura_3.PNG)
 
@@ -136,7 +136,7 @@ $ sudo lxd init
 
 ![](imgs/cb/captura_4.PNG)
 
-* Luego, debemos indicar una dirección IPv4 y en este caso utilizaremos la ip '192.168.2.0'.
+* Luego, debemos indicar una dirección IPv4 y en este dejaremos el valor que aparece indicado en pantalla.
 
 ![](imgs/cb/captura_5.PNG)
 
@@ -144,11 +144,11 @@ $ sudo lxd init
 
 ![](imgs/cb/captura_6.PNG)
 
-* En el siguiente cuadro vamos a indicarle la primera dirección IP que se usará en nuestra lista de direcciones (DHCP). Utilizaremos la ip '192.168.2.0' que es la misma que aparece en el paso de arriba.
+* En el siguiente cuadro vamos a indicarle la primera dirección IP que se usará en nuestra lista de direcciones (DHCP). Dejamos el mismo valor que aparece por defecto y presionamos en 'Aceptar'.
 
 ![](imgs/cb/captura_7.PNG)
 
-* Lo siguiente que haremos es indicar cual será la última dirección IP de nuestro pool de direcciones. Asignaremos la dirección '192.168.2.254'
+* Lo siguiente que haremos es indicar cual será la última dirección IP de nuestro pool de direcciones. Dejaremos el valor que aparece por defecto.
 
 ![](imgs/cb/captura_8.PNG)
 
@@ -163,6 +163,66 @@ $ sudo lxd init
 * Finalmente, podemos observar en la siguiente captura que la configuración fue exitosa.
 
 ![](imgs/cb/captura_11.PNG)
+
+## Creación de contenedores con servicio web (tenga en cuenta que son dos contenedores web)
+* El primer comando que ejcutaremos para crear nuestro primer contenedor web es el siguiente.
+
+```Console
+$ lxc launch ubuntu:16.04 webserver1
+```
+
+* Debido a que nunca se habían creado contenedores en nuestra máquina virtual, el comando anterior descarga una imágen de ubuntu 16.04 y la almacena en disco para que pueda ser utilizada como plantilla para otros contenedores. 
+
+* Repetiremos el comando anterior para 'webserver2' y para 'loadbalancer' y ya tendremos 3 contenedores. A continuación, se puede ver la lista de contenedores creados mediante el comando 'lxc list'.
+
+![](imgs/cc/captura_1.PNG)
+
+* En la imagen anterior, podemos observar que la asignación de IPs se realiza de forma automática a partir de la configuración de la interfaz bridge creada en los pasos anteriores. Además, los contenedores se encuentran activos. 
+
+* Lo siguiente que haremos es alojar un sitio web utilizando nginx en el primer contendor y segundo, para ello entramos a su shell utilizando el siguiente comando.
+
+```Console
+$ lxc exec webserver1 -- /bin/bash
+```
+
+* Dentro del shell del contenedor webserver1, ejecutaremos el comando que se mostrará a continuación, el cual permite instalar un servidor web/proxy llamado nginx.
+
+```Console
+$ sudo apt-get install nginx
+```
+
+* Después de terminarse la instalación del servidor, iremos a la carpeta /var/www/html/ y editaremos el archivo index que se encuentra adentro. Esto lo podemos hacer con el siguiente comando.
+
+```Console
+$ sudo vi /var/www/html/index.nginx-debian.html
+```
+
+* El comando anterior nos muestra el siguiente contenido, el cual va a ser la página principal que podra ser vista cuando se acceda al servidor.
+
+![](imgs/cc/captura_2.PNG)
+
+* Para diferenciar este contenido del servidor dos, modificaremos el archivo dejandolo de la siguiente forma.
+
+![](imgs/cc/captura_3.PNG)
+
+* Lo siguiente que haremos es ejecutar el siguiente comando para verificar el estado del servidor nginx.
+
+```Console
+$ sudo service nginx status
+```
+
+* En la siguiente captura podemos observar que el servidor se encuentra funcionando correctamente.
+
+![](imgs/cc/captura_5.PNG)
+
+* Lo siguiente que haremos es salirnos del shell del contendor webserver1 utilizando el comando 'exit' y vamos a hacerle una petición CURL a la ip donde se encuentra el contenedor que es la '10.60.248.73'. En la siguiente imagen se ve el resultado de hacer la petición y efectivamente el servidor se encuentra funcionado.
+
+![](imgs/cc/captura_4.PNG)
+
+* Realizamos el mismo procedimiento para el webserver2 y este es el resultado final de hacerle curl a ambos servidores.
+
+![](imgs/cc/captura_6.PNG)
+
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
