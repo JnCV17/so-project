@@ -238,7 +238,7 @@ $ lxc config set webserver2 limits.cpu 1
 ## Creación de contenedor con servicio de balanceo de carga
 * Para crear el balanceador de carga en el contenedor 'loadbalancer' ingresamos a su shell e instalamos nginx.
 
-* Después de instalar el servidor, vamos a crear llamado 'load-balancer.conf' en la carpeta /etc/nginx/conf.d/. Esto lo haremos con el siguiente comando.
+* Después de instalar el servidor, vamos a crear un archivo llamado 'load-balancer.conf' en la carpeta /etc/nginx/conf.d/. Esto lo haremos con el siguiente comando.
 
 ```Console
 $ sudo vi /etc/nginx/conf.d/load-balancer.conf
@@ -290,7 +290,7 @@ $ sudo service nginx restart
 * Para permitir conexiones remotas a nuestro balanceador de carga, utilizaremos el siguiente comando que crea una regla en la iptable, la cual permite que el tráfico http del host sea reenviado al contenedor del balanceador de carga.
 
 ```Console
-iptables -t nat -A PREROUTING -p tcp -m conntrack --ctstate NEW --dport 80 -j DNAT --to-destination 10.60.248.59:80
+sudo iptables -t nat -A PREROUTING -p tcp -m conntrack --ctstate NEW --dport 80 -j DNAT --to-destination 10.60.248.59:80
 ```
 
 * Para verificar que podemos acceder a nuestros servidores pero pasando por el balanceador de carga, vamos al navegador y escribiremos la ip de la máquina virtual que es '192.168.1.10'. Cada vez que recarguemos la página se cambiara el servidor al que estemos accediendo.
@@ -303,6 +303,116 @@ iptables -t nat -A PREROUTING -p tcp -m conntrack --ctstate NEW --dport 80 -j DN
 
 ![](imgs/cc/captura_10.PNG)
 
+## Pruebas del funcionamiento del balanceador
+* Lo primero que haremos para ejecutar las pruebas de estrés hacia nuestros servidores web es instalar siege. Siege es una utilidad de pruebas de carga http utilizado para medir el rendimiento de servidores web. Para instalarlo, ejecutaremos el siguiente comando para descargar la última versión disponible en el sitio web de siege.
+
+```Console
+wget http://download.joedog.org/siege/siege-latest.tar.gz
+```
+
+* Luego vamos a extraer el contenido del archivo con el siguiente comando.
+
+```Console
+tar -zxvf siege-latest.tar.gz
+```
+
+* Lo siguiente que haremos es instalar un compilardor de C++ ya que en la instalación de siege va a ser necesario. Esto lo haremos mediante el siguiente comando.
+
+```Console
+sudo apt-get install build-essential
+```
+
+* Para finalizar la instalación ejecutaremos los siguiente comandos.
+
+```Console
+./configure
+```
+
+```Console
+make
+```
+
+```Console
+sudo make install
+```
+
+* En este punto, siege ya habrá quedado instalado en nuestra máquina virtual.
+
+### Pruebas de estrés servidores web con uso de CPU al 50%
+* Para modificar el porcentaje de CPU utilizado por los servidores web a 50%, vamos a ejecutar los siguientes comandos.
+
+```Console
+lxc config set webserver1 limits.cpu.allowance 50%
+```
+
+```Console
+lxc config set webserver2 limits.cpu.allowance 50%
+```
+
+* Ahora, utilizando nuestra herramienta de test siege ejecutaremos el siguiente comando, el cual asigna una concurrencia de 255 usuarios y ejecuta las pruebas una sola vez.
+
+```Console
+siege -c 255 10.60.248.59 --reps=1
+```
+
+* En el comando anterior indicamos la IP de nuestro balanceador de carga para que apunte a dicho contenedor.
+
+* A continuación, se muestra el resultado de las pruebas.
+
+![](imgs/ps/captura_1.PNG)
+
+### Pruebas de estrés servidores web con uso de CPU al 100%
+* Para habilitar el uso de cpu de los servidores al 100%, ejecutaremos los siguientes comandos.
+
+```Console
+lxc config set webserver1 limits.cpu.allowance 100%
+```
+
+```Console
+lxc config set webserver2 limits.cpu.allowance 100%
+```
+
+* Ahora volveremos a ejeutar el mismo comando de siege para ejecutar las pruebas de estrés. El resultado de las pruebas es el siguiente.
+
+![](imgs/ps/captura_2.PNG)
+
+* Podemos observar que se reduce que la concurrencia y el throughput con el resultado anterior disminuye 
+
+### Pruebas de estrés servidores web con 64MB de memoria RAM
+* Para limitar el uso de memoria RAM de los contenedores web a 64MB, ejecutaremos los siguientes comandos.
+
+```Console
+lxc config set webserver1 limits.memory 64MB
+```
+
+```Console
+lxc config set webserver2 limits.memory 64MB
+```
+
+* Luego, usando el mismo comando para pruebas de estrés, ejecutaremos las mismas pruebas usando la utilidad siege. A continuación, se muestra el resultado de las pruebas.
+
+![](imgs/ps/captura_3.PNG)
+
+### Pruebas de estrés servidores web con 128MB de memoria RAM
+* Ejecutamos los siguientes comando para modificar el límte de memoria RAM utilizada por ambos servidores web a 128MB.
+
+```Console
+lxc config set webserver1 limits.memory 128MB
+```
+
+```Console
+lxc config set webserver2 limits.memory 128MB
+```
+
+* Volvemos a ejecutar las pruebas de estrés y obtenemos los siguientes resultados.
+
+![](imgs/ps/captura_4.PNG)
+
+* Realizando la comparación, podemos observar que al aumentar la cantidad de memoria RAM disponible por ambos servidores web, podemos reducir la concurrencia y el throughtput, además de la tasa de transacciones.
+
+* A continuación, se vuelve a presentar una captura con la respuesta del balanceador de carga al hacerle dos peticiones mediante el comando CURL.
+
+![](imgs/cc/captura_7.PNG)
 
 ## Bibliografía
 * https://community.netapp.com/t5/Espa%C3%B1a/Storage-Pools/ba-p/99752
